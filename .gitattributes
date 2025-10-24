@@ -1,0 +1,72 @@
+# ===============================
+# Unity Project .gitattributes (2025)
+# For Unity 2022.3+, multi-dev team, cross-platform (Win/mac/Linux)
+# ===============================
+
+# === 改行コードの統一 ===
+# OS間の改行差異を自動吸収（Windows: CRLF, macOS/Linux: LF）
+* text=auto
+
+# === C# ソースコードの差分をわかりやすく表示 ===
+*.cs diff=csharp
+
+# === Unity YAMLファイルを Smart Merge (UnityYAMLMerge) で扱う設定 ===
+# ※ Smart Merge を有効にするには Unity 側でツール設定が必要
+#    Edit > Preferences > External Tools > Smart Merge を有効化
+[attr]unity-yaml merge=unityyamlmerge linguist-generated text
+
+# Unity YAML形式ファイル（マージ可能）
+*.unity         unity-yaml
+*.prefab        unity-yaml
+*.asset         unity-yaml
+*.anim          unity-yaml
+*.controller    unity-yaml
+*.mat           unity-yaml
+*.meta          unity-yaml
+*.physicsMaterial2D unity-yaml
+*.physicMaterial    unity-yaml
+*.lighting      unity-yaml
+*.scene         unity-yaml
+
+# Assembly定義ファイル（コード扱い・除外解除）
+*.asmdef unity-yaml -linguist-generated
+
+# === スクリプト / シェーダー系（テキスト扱い） ===
+*.shader text
+*.cginc text
+*.compute text
+*.hlsl text
+*.glsl text
+*.json text
+*.xml text
+*.yml text
+*.yaml text
+
+# === バイナリアセット類（正規化禁止） ===
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.bmp binary
+*.gif binary
+*.psd binary
+*.ai binary
+*.eps binary
+*.fbx binary
+*.obj binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.mp4 binary
+*.mov binary
+*.avi binary
+
+# === OS生成ファイル ===
+.DS_Store binary
+Thumbs.db binary
+
+# === Unityが生成するキャッシュ的バイナリ ===
+/[Ll]ibrary/** binary
+/[Tt]emp/** binary
