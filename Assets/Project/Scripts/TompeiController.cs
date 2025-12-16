@@ -20,43 +20,57 @@ public class TompeiController : MonoBehaviour
         }
     }
 
-    private Rigidbody rb;
-    private Transform tf;
-    private Animator anim;
-    public float speed = 5f;
+    [Header("Components")] 
+    public Rigidbody2D rb;
+    public Animator animator;
+
+    [Header("Parameters")] 
+    public float moveSpeed = 5f;
+    private float moveInput;
+
+    [Header("GameObjects")] 
+    public GameObject Left_Tompei;
+    public GameObject Right_Tompei;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        tf = GetComponent<Transform>();
-        //anim = GetComponent<Animator>();
+        Left_Tompei.SetActive(false);
+        Right_Tompei.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        moveInput = Input.GetAxisRaw("Horizontal");
 
+        if (moveInput != 0)
+        {
+            animator.SetFloat("DirectionX", moveInput);
+        }
+
+        animator.SetFloat("Speed", Mathf.Abs(moveInput));
+
+        if (moveInput < 0)
+        {
+            Left_Tompei.SetActive(true);
+            Right_Tompei.SetActive(false);
+        }
+        else if (moveInput > 0)
+        {
+            Left_Tompei.SetActive(false);
+            Right_Tompei.SetActive(true);
+        }
     }
-    
-    private void FixedUpdate()
+
+    void FixedUpdate()
     {
-        var hori = Input.GetAxis("Horizontal");
-        var vert = Input.GetAxis("Vertical");
-
-        if (hori != 0 || vert != 0)
-        {
-            // 移動方向に向けて回転
-            Vector3 dir = new Vector3(hori, 0, vert);
-            tf.rotation = Quaternion.LookRotation(dir);
-
-            //anim.SetBool("isWalking", true);
-
-            rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
-        }
-        else
-        {
-            // 歩くアニメーション停止
-            anim.SetBool("isWalking", false);
-        }
+        // 0.1秒で最高速度(moveSpeed)に到達するように加速
+        // acceleration = moveSpeed / 0.1f
+        float targetVelocityX = moveInput * moveSpeed;
+        float acceleration = moveSpeed / 0.1f; 
+        
+        float newVelocityX = Mathf.MoveTowards(rb.velocity.x, targetVelocityX, acceleration * Time.fixedDeltaTime);
+        
+        rb.velocity = new Vector2(newVelocityX, rb.velocity.y);
     }
 }
